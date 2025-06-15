@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "clean": "yarn cache clean",
+    "upgrade": "yarn upgrade-interactive --latest"
   },
   "dependencies": {
     "react": "^19.1.0",
