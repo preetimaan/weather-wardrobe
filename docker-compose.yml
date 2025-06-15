@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # Development service
+  dev:
+    build:
+      context: .
+      target: builder
+    command: yarn dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    stdin_open: true # docker run -i
+    tty: true       # docker run -t
+
+  # Production service
+  prod:
+    build:
+      context: .
+      target: builder
+    command: yarn preview --host 0.0.0.0
+    ports:
+      - "4173:4173"
+    environment:
+      - NODE_ENV=production
+
+  # Production nginx service
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - prod 
