@@ -1,54 +1,123 @@
-# React + TypeScript + Vite
+# Weather Wardrobe
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A weather-based outfit recommendation application that helps users choose appropriate clothing based on current weather conditions.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS
+- Yarn
+- Docker
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Weather-based outfit recommendations
+- Responsive design
+- Modern UI with Tailwind CSS
+- TypeScript for type safety
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Prerequisites
+
+- Node.js (v20.19.2 or higher)
+- Yarn
+- Docker (optional)
+
+## Getting Started
+
+### Local Development
+
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/weather-wardrobe.git
+cd weather-wardrobe
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+2. Install dependencies
+```bash
+yarn install
 ```
+
+3. Start the development server
+```bash
+yarn dev
+```
+
+The application will be available at `http://localhost:5173`
+
+### Docker Development
+
+1. Build and start the development container
+```bash
+docker compose up dev
+```
+
+2. Access the application at `http://localhost:5173`
+
+### Docker Production Preview
+
+1. Build and start the production preview
+```bash
+docker compose up preview
+```
+
+2. Access the application at `http://localhost:4173`
+
+## Development
+
+- `yarn dev` - Start development server
+- `yarn build` - Build for production
+- `yarn preview` - Preview production build
+- `yarn lint` - Run ESLint
+- `yarn clean` - Clean yarn cache
+- `yarn upgrade` - Interactive upgrade of dependencies
+
+## Docker Commands
+
+- `docker compose up dev` - Start development environment
+- `docker compose up preview` - Start production preview
+- `docker compose down` - Stop all containers
+- `docker compose logs -f` - View logs
+- `docker compose build` - Rebuild containers
+
+## Project Structure
+
+```
+weather-wardrobe/
+├── src/
+│   ├── App.tsx          # Main application component
+│   ├── main.tsx         # Application entry point
+│   ├── index.css        # Global styles with Tailwind
+│   └── assets/          # Static assets
+├── public/              # Public assets
+├── Dockerfile           # Docker configuration
+├── docker-compose.yml   # Docker services
+├── .dockerignore        # Docker ignore rules
+├── tailwind.config.js   # Tailwind CSS configuration
+├── postcss.config.js    # PostCSS configuration
+└── package.json         # Dependencies and scripts
+```
+
+## Deployment
+
+This application is configured for deployment on Netlify. The build process creates optimized static files that can be served by any static hosting service.
+
+### Netlify Deployment
+
+1. Connect your repository to Netlify
+2. Set build command: `yarn build`
+3. Set publish directory: `dist`
+4. Deploy!
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests and linting
+5. Submit a pull request
+
+## License
+
+MIT
