@@ -1,5 +1,5 @@
-# Build stage
-FROM node:20.19.2-alpine AS builder
+# Build stage for Netlify deployment
+FROM node:20.19.2-alpine
 
 WORKDIR /app
 
@@ -13,17 +13,8 @@ COPY . .
 # Build the app
 RUN yarn build
 
-# Production stage
-FROM nginx:alpine
+# Expose port for local testing
+EXPOSE 4173
 
-# Copy built assets from builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port 80
-EXPOSE 80
-
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"] 
+# Start the preview server
+CMD ["yarn", "preview", "--host", "0.0.0.0"] 
