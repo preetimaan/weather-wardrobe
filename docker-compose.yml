@@ -1,13 +1,37 @@
 services:
-  # Development service
+  # Frontend service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3001:80"
+    environment:
+      - NODE_ENV=production
+    # depends_on:
+    #   - backend
+
+  # Backend service (temporarily disabled)
+  # backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - NODE_ENV=production
+  #     - PORT=3000
+
+  # Development service (optional)
   dev:
     build:
-      context: .
+      context: ./frontend
+      dockerfile: Dockerfile.dev
     command: yarn dev
     ports:
       - "5173:5173"
     volumes:
-      - .:/app
+      - ./frontend:/app
       - /app/node_modules
     environment:
       - NODE_ENV=development
