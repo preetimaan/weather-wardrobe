@@ -1,4 +1,4 @@
-// Weather API service for OpenWeatherMap integration
+// Weather API service for backend integration
 
 export interface WeatherData {
   main: {
@@ -46,24 +46,17 @@ export interface ForecastData {
 }
 
 class WeatherApiService {
-  private apiKey: string;
   private baseUrl: string;
 
   constructor() {
-    this.apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
-    this.baseUrl = import.meta.env.VITE_OPENWEATHER_BASE_URL || 'https://api.openweathermap.org/data/2.5';
-    
-    if (!this.apiKey) {
-      throw new Error('OpenWeatherMap API key is required. Please set VITE_OPENWEATHER_API_KEY in your environment variables.');
-    }
+    // Use our backend API instead of OpenWeatherMap directly
+    this.baseUrl = 'http://localhost:3000/api';
   }
 
   private async makeRequest<T>(endpoint: string, params: Record<string, string> = {}): Promise<T> {
     const url = new URL(`${this.baseUrl}${endpoint}`);
-    url.searchParams.set('appid', this.apiKey);
-    url.searchParams.set('units', 'metric'); // Use Celsius
     
-    // Add additional parameters
+    // Add parameters
     Object.entries(params).forEach(([key, value]) => {
       url.searchParams.set(key, value);
     });
@@ -71,14 +64,15 @@ class WeatherApiService {
     const response = await fetch(url.toString());
     
     if (!response.ok) {
-      throw new Error(`Weather API error: ${response.status} ${response.statusText}`);
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `Weather API error: ${response.status} ${response.statusText}`);
     }
 
     return response.json();
   }
 
   async getCurrentWeather(city: string): Promise<WeatherData> {
-    return this.makeRequest<WeatherData>('/weather', { q: city });
+    return this.makeRequest<WeatherData>('/weather', { city });
   }
 
   async getCurrentWeatherByCoords(lat: number, lon: number): Promise<WeatherData> {
@@ -88,15 +82,13 @@ class WeatherApiService {
     });
   }
 
+  // Note: Forecast endpoints will need to be implemented in the backend
   async getForecast(city: string): Promise<ForecastData> {
-    return this.makeRequest<ForecastData>('/forecast', { q: city });
+    throw new Error('Forecast not yet implemented in backend');
   }
 
   async getForecastByCoords(lat: number, lon: number): Promise<ForecastData> {
-    return this.makeRequest<ForecastData>('/forecast', { 
-      lat: lat.toString(), 
-      lon: lon.toString() 
-    });
+    throw new Error('Forecast not yet implemented in backend');
   }
 
   // Helper method to get weather icon URL
