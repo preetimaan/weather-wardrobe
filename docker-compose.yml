@@ -8,42 +8,16 @@ services:
       - "3001:80"
     environment:
       - NODE_ENV=production
-    # depends_on:
-    #   - backend
+    depends_on:
+      - backend
 
-  # Backend service (temporarily disabled)
-  # backend:
-  #   build:
-  #     context: ./backend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000"
-  #   environment:
-  #     - NODE_ENV=production
-  #     - PORT=3000
-
-  # Development service (optional)
-  dev:
+  # Backend service
+  backend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
-    command: yarn dev
+      context: ./backend
+      dockerfile: Dockerfile
     ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+      - "3000:3000"
     environment:
-      - NODE_ENV=development
-    stdin_open: true
-    tty: true
-
-  # Production preview service
-  preview:
-    build:
-      context: .
-    command: yarn preview --host 0.0.0.0
-    ports:
-      - "4173:4173"
-    environment:
-      - NODE_ENV=production 
+      - NODE_ENV=production
+      - PORT=3000 
