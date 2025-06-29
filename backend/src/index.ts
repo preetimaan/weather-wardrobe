@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import weatherRoutes from './routes/weather';
+import wardrobeRoutes from './routes/wardrobe';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -24,6 +25,7 @@ app.use(express.json());
 
 // API routes
 app.use('/api', weatherRoutes);
+app.use('/api', wardrobeRoutes);
 
 // Debug route to check environment variables
 app.get('/debug', (req: Request, res: Response) => {
