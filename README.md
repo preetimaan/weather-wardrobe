@@ -4,19 +4,93 @@ A weather-based outfit recommendation application that helps users choose approp
 
 ## Tech Stack
 
+### Frontend
 - React 19
 - TypeScript
 - Vite
 - Tailwind CSS
 - Yarn
+
+### Backend
+- Node.js
+- Express.js
+- TypeScript
+- Axios
+
+### Infrastructure
 - Docker
+- Docker Compose
 
-## Features
+## ✅ Existing Features
 
-- Weather-based outfit recommendations
-- Responsive design
-- Modern UI with Tailwind CSS
-- TypeScript for type safety
+### Core Functionality
+- **🌤️ Weather Data Integration** - Real-time weather data from OpenWeatherMap API
+- **👗 Wardrobe Recommendations** - Smart clothing suggestions based on weather conditions
+- **🌡️ Temperature Unit Toggle** - Switch between Celsius and Fahrenheit
+- **📍 Location Search** - Search for cities worldwide
+- **📱 Responsive Design** - Works seamlessly on desktop and mobile devices
+
+### Weather Features
+- **Current Weather Display** - Temperature, feels like, humidity, wind speed, pressure
+- **Weather Icons** - Visual weather condition representation
+- **Weather Details** - Comprehensive weather information in organized cards
+- **Real-time Updates** - Live weather data with timestamps
+
+### Wardrobe Intelligence
+- **Temperature-Based Suggestions** - Clothing recommendations for different temperature ranges
+- **Weather Condition Logic** - Special recommendations for rain, snow, storms
+- **Wind Protection** - Suggestions for windy conditions
+- **Humidity Management** - Moisture-wicking recommendations for high humidity
+- **Sun Protection** - UV protection suggestions for warm weather
+- **Categorized Recommendations** - Organized by clothing type (Outerwear, Clothing, etc.)
+
+### User Interface
+- **Modern UI Design** - Clean, intuitive interface with Tailwind CSS
+- **Two-Column Layout** - Weather information and wardrobe suggestions side by side
+- **Loading States** - Smooth loading animations and skeleton screens
+- **Error Handling** - User-friendly error messages and recovery
+- **Empty States** - Helpful guidance when no data is available
+
+### Technical Features
+- **TypeScript Integration** - Full type safety across the application
+- **Docker Containerization** - Easy deployment and development setup
+- **API Proxy** - Secure backend proxy for weather API calls
+- **CORS Support** - Cross-origin resource sharing for frontend-backend communication
+- **Environment Configuration** - Secure API key management
+
+## 🚀 Potential Features
+
+### High Priority
+- **🔍 Location Autocomplete** - Google Places API integration for city search suggestions
+- **📍 GPS Location Detection** - "Use my location" button with geolocation
+- **🌤️ Weather Forecast** - 5-day/7-day weather predictions
+- **⏰ Hourly Forecast** - Detailed hourly weather breakdown
+- **👤 User Profiles** - Personal preferences and style settings
+
+### Medium Priority
+- **🎨 Dark Mode** - Theme switching capability
+- **📱 PWA Support** - Progressive Web App features for mobile installation
+- **🌅 Sunrise/Sunset Times** - Daily sun timing information
+- **🌤️ UV Index** - Sun protection recommendations
+- **🎯 Style Preferences** - Casual, formal, sporty, etc.
+- **💾 Local Storage** - Save user preferences locally
+
+### Advanced Features
+- **👕 Personal Wardrobe** - Add/remove items from your closet
+- **❤️ Favorite Outfits** - Save and organize favorite combinations
+- **🎭 Occasion-Based Suggestions** - Work, casual, formal, outdoor activities
+- **🧥 Layering Recommendations** - How to layer clothing effectively
+
+
+### Technical Enhancements
+- **🔒 User Authentication** - Login system for personalized features
+- **📊 Database Integration** - Store user data and preferences
+- **🤖 AI-Powered Suggestions** - Machine learning for better recommendations
+
+### Weather Alerts
+- **⚠️ Severe Weather Warnings** - Real-time weather alerts
+- **🌪️ Storm Tracking** - Severe weather notifications
+- **🌡️ Temperature Alerts** - Extreme temperature warnings
 
 ## Prerequisites
 
@@ -39,7 +113,13 @@ cd weather-wardrobe
 yarn install
 ```
 
-3. Start the development server
+3. Set up environment variables
+```bash
+# Create .env file in backend directory
+OPENWEATHER_API_KEY=your_api_key_here
+```
+
+4. Start the development server
 ```bash
 yarn dev
 ```
@@ -85,19 +165,35 @@ docker compose up preview
 
 ```
 weather-wardrobe/
-├── src/
-│   ├── App.tsx          # Main application component
-│   ├── main.tsx         # Application entry point
-│   ├── index.css        # Global styles with Tailwind
-│   └── assets/          # Static assets
-├── public/              # Public assets
-├── Dockerfile           # Docker configuration
-├── docker-compose.yml   # Docker services
-├── .dockerignore        # Docker ignore rules
-├── tailwind.config.js   # Tailwind CSS configuration
-├── postcss.config.js    # PostCSS configuration
-└── package.json         # Dependencies and scripts
+├── frontend/
+│   ├── src/
+│   │   ├── components/     # React components
+│   │   ├── hooks/         # Custom React hooks
+│   │   ├── services/      # API services
+│   │   ├── utils/         # Utility functions
+│   │   ├── assets/        # Static assets
+│   │   └── App.tsx        # Main application component
+│   ├── public/            # Public assets
+│   └── package.json       # Frontend dependencies
+├── backend/
+│   ├── src/
+│   │   ├── routes/        # API routes
+│   │   ├── services/      # Business logic
+│   │   └── index.ts       # Server entry point
+│   └── package.json       # Backend dependencies
+├── docker-compose.yml     # Docker services
+└── README.md             # Project documentation
 ```
+
+## API Endpoints
+
+### Weather API
+- `GET /api/weather?city={city}` - Get current weather by city
+- `GET /api/weather?lat={lat}&lon={lon}` - Get current weather by coordinates
+
+### Wardrobe API
+- `GET /api/wardrobe-suggestions?city={city}` - Get wardrobe suggestions by city
+- `GET /api/wardrobe-suggestions?lat={lat}&lon={lon}` - Get wardrobe suggestions by coordinates
 
 ## Deployment
 
