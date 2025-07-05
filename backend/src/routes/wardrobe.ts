@@ -2,12 +2,14 @@ import { Router, Request, Response } from 'express';
 import axios from 'axios';
 import wardrobeService from '../services/wardrobeService';
 
+type Gender = 'male' | 'female' | 'unisex';
+
 const router = Router();
 
 // Wardrobe suggestions endpoint
 router.get('/wardrobe-suggestions', async (req: Request, res: Response): Promise<void> => {
   try {
-    const { city, lat, lon, weatherData } = req.query;
+    const { city, lat, lon, weatherData, gender } = req.query;
 
     let weather: any;
 
@@ -53,9 +55,15 @@ router.get('/wardrobe-suggestions', async (req: Request, res: Response): Promise
       weather = response.data;
     }
 
-    // Get wardrobe suggestions
-    const suggestions = wardrobeService.getWardrobeSuggestions(weather);
-    const summary = wardrobeService.getSummaryAdvice(weather);
+    // Validate gender parameter
+    const validGenders: Gender[] = ['male', 'female', 'unisex'];
+    const selectedGender: Gender = gender && validGenders.includes(gender as Gender) 
+      ? (gender as Gender) 
+      : 'unisex';
+
+    // Get wardrobe suggestions with gender parameter
+    const suggestions = wardrobeService.getWardrobeSuggestions(weather, selectedGender);
+    const summary = wardrobeService.getSummaryAdvice(weather, selectedGender);
 
     // Return the wardrobe suggestions
     res.json({
@@ -68,7 +76,8 @@ router.get('/wardrobe-suggestions', async (req: Request, res: Response): Promise
       },
       suggestions,
       summary,
-      location: weather.name
+      location: weather.name,
+      gender: selectedGender
     });
 
   } catch (error: any) {

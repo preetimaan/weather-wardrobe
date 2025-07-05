@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import type { Gender } from '../components/GenderFilter';
 
 interface WardrobeSuggestion {
   category: string;
@@ -17,13 +18,14 @@ interface WardrobeData {
   suggestions: WardrobeSuggestion[];
   summary: string;
   location: string;
+  gender: Gender;
 }
 
 interface UseWardrobeReturn {
   wardrobeData: WardrobeData | null;
   loading: boolean;
   error: string | null;
-  fetchWardrobeSuggestions: (city?: string, lat?: number, lon?: number) => Promise<void>;
+  fetchWardrobeSuggestions: (city?: string, lat?: number, lon?: number, gender?: Gender) => Promise<void>;
 }
 
 const useWardrobe = (): UseWardrobeReturn => {
@@ -31,7 +33,12 @@ const useWardrobe = (): UseWardrobeReturn => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchWardrobeSuggestions = async (city?: string, lat?: number, lon?: number): Promise<void> => {
+  const fetchWardrobeSuggestions = async (
+    city?: string, 
+    lat?: number, 
+    lon?: number, 
+    gender: Gender = 'unisex'
+  ): Promise<void> => {
     if (!city && (!lat || !lon)) {
       setError('Please provide a city name or coordinates');
       return;
@@ -48,6 +55,8 @@ const useWardrobe = (): UseWardrobeReturn => {
       } else {
         url += `lat=${lat}&lon=${lon}`;
       }
+
+      url += `&gender=${gender}`;
 
       const response = await fetch(url);
       

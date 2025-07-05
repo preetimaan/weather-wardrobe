@@ -27,6 +27,7 @@ A weather-based outfit recommendation application that helps users choose approp
 - **🌤️ Weather Data Integration** - Real-time weather data from OpenWeatherMap API
 - **👗 Wardrobe Recommendations** - Smart clothing suggestions based on weather conditions
 - **🌡️ Temperature Unit Toggle** - Switch between Celsius and Fahrenheit
+- **👔 Gender Filter** - Personalized suggestions for Men's, Women's, and Unisex styles
 - **📍 Location Search** - Search for cities worldwide
 - **📱 Responsive Design** - Works seamlessly on desktop and mobile devices
 
@@ -42,6 +43,7 @@ A weather-based outfit recommendation application that helps users choose approp
 - **Wind Protection** - Suggestions for windy conditions
 - **Humidity Management** - Moisture-wicking recommendations for high humidity
 - **Sun Protection** - UV protection suggestions for warm weather
+- **Gender-Specific Recommendations** - Personalized clothing suggestions based on style preferences
 - **Categorized Recommendations** - Organized by clothing type (Outerwear, Clothing, etc.)
 
 ### User Interface
@@ -50,6 +52,7 @@ A weather-based outfit recommendation application that helps users choose approp
 - **Loading States** - Smooth loading animations and skeleton screens
 - **Error Handling** - User-friendly error messages and recovery
 - **Empty States** - Helpful guidance when no data is available
+- **Filter Controls** - Temperature unit and gender style toggles
 
 ### Technical Features
 - **TypeScript Integration** - Full type safety across the application
@@ -192,8 +195,9 @@ weather-wardrobe/
 - `GET /api/weather?lat={lat}&lon={lon}` - Get current weather by coordinates
 
 ### Wardrobe API
-- `GET /api/wardrobe-suggestions?city={city}` - Get wardrobe suggestions by city
-- `GET /api/wardrobe-suggestions?lat={lat}&lon={lon}` - Get wardrobe suggestions by coordinates
+- `GET /api/wardrobe-suggestions?city={city}&gender={gender}` - Get wardrobe suggestions by city
+- `GET /api/wardrobe-suggestions?lat={lat}&lon={lon}&gender={gender}` - Get wardrobe suggestions by coordinates
+- **Gender Parameter**: `gender` can be `male`, `female`, or `unisex` (defaults to `unisex`)
 
 ## Deployment
 

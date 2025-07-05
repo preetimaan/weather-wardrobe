@@ -7,11 +7,14 @@ import { LocationSearch } from './components/LocationSearch';
 import WardrobeSuggestions from './components/WardrobeSuggestions';
 import TemperatureToggle from './components/TemperatureToggle';
 import type { TemperatureUnit } from './components/TemperatureToggle';
+import GenderFilter from './components/GenderFilter';
+import type { Gender } from './components/GenderFilter';
 import Closet from './assets/walk-in closet flat background.jpg';
 
 function App() {
   const [, setCurrentCity] = useState<string>('');
   const [temperatureUnit, setTemperatureUnit] = useState<TemperatureUnit>('celsius');
+  const [gender, setGender] = useState<Gender>('unisex');
 
   const {
     currentWeather,
@@ -30,11 +33,19 @@ function App() {
   const handleCitySearch = async (city: string) => {
     setCurrentCity(city);
     await fetchWeatherByCity(city);
-    await fetchWardrobeSuggestions(city);
+    await fetchWardrobeSuggestions(city, undefined, undefined, gender);
   };
 
   const handleTemperatureUnitChange = (unit: TemperatureUnit) => {
     setTemperatureUnit(unit);
+  };
+
+  const handleGenderChange = (selectedGender: Gender) => {
+    setGender(selectedGender);
+    // Refetch wardrobe suggestions with new gender if we have a city
+    if (currentWeather) {
+      fetchWardrobeSuggestions(currentWeather.name, undefined, undefined, selectedGender);
+    }
   };
 
   return (
@@ -62,12 +73,17 @@ function App() {
                       loading={weatherLoading || wardrobeLoading}
                       className="mb-6"
                     />
-                    {/* Temperature Toggle for empty state */}
-                    <TemperatureToggle
-                      unit={temperatureUnit}
-                      onUnitChange={handleTemperatureUnitChange}
-                      className="mt-4"
-                    />
+                    {/* Filters for empty state */}
+                    <div className="flex flex-col space-y-4 mt-4">
+                      <TemperatureToggle
+                        unit={temperatureUnit}
+                        onUnitChange={handleTemperatureUnitChange}
+                      />
+                      <GenderFilter
+                        gender={gender}
+                        onGenderChange={handleGenderChange}
+                      />
+                    </div>
                   </div>
                 ) : (
                   <>
@@ -76,11 +92,15 @@ function App() {
                       loading={weatherLoading || wardrobeLoading}
                       className="mb-6"
                     />
-                    {/* Temperature Toggle */}
-                    <div className="mb-4">
+                    {/* Filters */}
+                    <div className="flex flex-col space-y-4 mb-4">
                       <TemperatureToggle
                         unit={temperatureUnit}
                         onUnitChange={handleTemperatureUnitChange}
+                      />
+                      <GenderFilter
+                        gender={gender}
+                        onGenderChange={handleGenderChange}
                       />
                     </div>
                     {(weatherError || wardrobeError) && (
