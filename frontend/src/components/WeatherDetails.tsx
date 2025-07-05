@@ -1,4 +1,6 @@
 import React from 'react';
+import type { TemperatureUnit } from './TemperatureToggle';
+import { formatTemperature, formatWindSpeed } from '../utils/temperature';
 
 interface WeatherDetailsProps {
   weather: {
@@ -7,10 +9,15 @@ interface WeatherDetailsProps {
     humidity: number;
     wind_speed: number;
   };
+  temperatureUnit: TemperatureUnit;
   className?: string;
 }
 
-const WeatherDetails: React.FC<WeatherDetailsProps> = ({ weather, className = '' }) => {
+const WeatherDetails: React.FC<WeatherDetailsProps> = ({ 
+  weather, 
+  temperatureUnit, 
+  className = '' 
+}) => {
   return (
     <div className={`bg-white rounded-lg shadow-md p-6 ${className}`}>
       <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -19,13 +26,13 @@ const WeatherDetails: React.FC<WeatherDetailsProps> = ({ weather, className = ''
       <div className="grid grid-cols-2 gap-4">
         <div className="text-center p-3 bg-gray-50 rounded-lg">
           <div className="text-2xl font-bold text-gray-900">
-            {Math.round(weather.temperature)}°C
+            {formatTemperature(weather.temperature, temperatureUnit)}
           </div>
           <div className="text-sm text-gray-600">Temperature</div>
         </div>
         <div className="text-center p-3 bg-gray-50 rounded-lg">
           <div className="text-2xl font-bold text-gray-900">
-            {Math.round(weather.feels_like)}°C
+            {formatTemperature(weather.feels_like, temperatureUnit)}
           </div>
           <div className="text-sm text-gray-600">Feels Like</div>
         </div>
@@ -37,7 +44,7 @@ const WeatherDetails: React.FC<WeatherDetailsProps> = ({ weather, className = ''
         </div>
         <div className="text-center p-3 bg-gray-50 rounded-lg">
           <div className="text-2xl font-bold text-gray-900">
-            {Math.round(weather.wind_speed)} km/h
+            {formatWindSpeed(weather.wind_speed, temperatureUnit)}
           </div>
           <div className="text-sm text-gray-600">Wind</div>
         </div>

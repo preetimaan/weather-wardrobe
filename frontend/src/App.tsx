@@ -5,10 +5,13 @@ import { WeatherDisplay } from './components/WeatherDisplay';
 import WeatherDetails from './components/WeatherDetails';
 import { LocationSearch } from './components/LocationSearch';
 import WardrobeSuggestions from './components/WardrobeSuggestions';
+import TemperatureToggle from './components/TemperatureToggle';
+import type { TemperatureUnit } from './components/TemperatureToggle';
 import Closet from './assets/walk-in closet flat background.jpg';
 
 function App() {
   const [, setCurrentCity] = useState<string>('');
+  const [temperatureUnit, setTemperatureUnit] = useState<TemperatureUnit>('celsius');
 
   const {
     currentWeather,
@@ -28,6 +31,10 @@ function App() {
     setCurrentCity(city);
     await fetchWeatherByCity(city);
     await fetchWardrobeSuggestions(city);
+  };
+
+  const handleTemperatureUnitChange = (unit: TemperatureUnit) => {
+    setTemperatureUnit(unit);
   };
 
   return (
@@ -55,6 +62,12 @@ function App() {
                       loading={weatherLoading || wardrobeLoading}
                       className="mb-6"
                     />
+                    {/* Temperature Toggle for empty state */}
+                    <TemperatureToggle
+                      unit={temperatureUnit}
+                      onUnitChange={handleTemperatureUnitChange}
+                      className="mt-4"
+                    />
                   </div>
                 ) : (
                   <>
@@ -63,6 +76,13 @@ function App() {
                       loading={weatherLoading || wardrobeLoading}
                       className="mb-6"
                     />
+                    {/* Temperature Toggle */}
+                    <div className="mb-4">
+                      <TemperatureToggle
+                        unit={temperatureUnit}
+                        onUnitChange={handleTemperatureUnitChange}
+                      />
+                    </div>
                     {(weatherError || wardrobeError) && (
                       <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
                         <div className="flex">
@@ -99,6 +119,7 @@ function App() {
                       <div className="flex flex-col flex-1">
                         <WeatherDisplay
                           weather={currentWeather}
+                          temperatureUnit={temperatureUnit}
                           className="mt-6"
                         />
 
@@ -106,6 +127,7 @@ function App() {
                         {wardrobeData && (
                           <WeatherDetails
                             weather={wardrobeData.weather}
+                            temperatureUnit={temperatureUnit}
                             className="mt-6"
                           />
                         )}

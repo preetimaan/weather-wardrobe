@@ -1,13 +1,18 @@
 import type { WeatherData } from '../services/weatherApi';
+import type { TemperatureUnit } from './TemperatureToggle';
+import { formatTemperature, formatWindSpeed } from '../utils/temperature';
 
 interface WeatherDisplayProps {
   weather: WeatherData;
+  temperatureUnit: TemperatureUnit;
   className?: string;
 }
 
-export const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather, className = '' }) => {
-  const formatTemperature = (temp: number) => `${Math.round(temp)}°C`;
-  const formatWindSpeed = (speed: number) => `${Math.round(speed)} m/s`;
+export const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ 
+  weather, 
+  temperatureUnit, 
+  className = '' 
+}) => {
   const formatHumidity = (humidity: number) => `${humidity}%`;
 
   return (
@@ -21,10 +26,10 @@ export const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather, classNa
         </div>
         <div className="text-right">
           <div className="text-4xl font-bold text-blue-600">
-            {formatTemperature(weather.main.temp)}
+            {formatTemperature(weather.main.temp, temperatureUnit)}
           </div>
           <div className="text-sm text-gray-500">
-            Feels like {formatTemperature(weather.main.feels_like)}
+            Feels like {formatTemperature(weather.main.feels_like, temperatureUnit)}
           </div>
         </div>
       </div>
@@ -53,7 +58,7 @@ export const WeatherDisplay: React.FC<WeatherDisplayProps> = ({ weather, classNa
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <span className="text-gray-600">Wind</span>
-          <span className="font-semibold">{formatWindSpeed(weather.wind.speed)}</span>
+          <span className="font-semibold">{formatWindSpeed(weather.wind.speed, temperatureUnit)}</span>
         </div>
 
         <div className="flex items-center space-x-2">
