@@ -20,4 +20,5 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - PORT=3000 
+      - PORT=3000
+      - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY} 
