@@ -1,8 +1,7 @@
 import { Router, Request, Response } from 'express';
 import axios from 'axios';
 import wardrobeService from '../services/wardrobeService';
-
-type Gender = 'male' | 'female' | 'unisex';
+import { Gender } from '../services/types';
 
 const router = Router();
 
