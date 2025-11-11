@@ -48,23 +48,47 @@ export function buildSuggestions(
       reasoning: "Mild weather - comfortable light layers",
     });
   } else if (temp < 30) {
-    suggestions.push({
-      category: "Clothing",
-      items: getGenderSpecificItems(
-        ["T-shirt", "Short sleeve shirt", "Light pants"],
-        gender
-      ),
-      reasoning: "Warm weather - light, breathable clothing",
-    });
+    // For females, randomly suggest dress instead of top + bottoms
+    if (gender === "female" && Math.random() < 0.5) {
+      suggestions.push({
+        category: "Clothing",
+        items: getGenderSpecificItems(
+          ["Dress", "Light, breathable fabrics"],
+          gender
+        ),
+        reasoning: "Warm weather - light, breathable clothing",
+      });
+    } else {
+      suggestions.push({
+        category: "Clothing",
+        items: getGenderSpecificItems(
+          ["T-shirt", "Short sleeve shirt", "Light pants"],
+          gender
+        ),
+        reasoning: "Warm weather - light, breathable clothing",
+      });
+    }
   } else {
-    suggestions.push({
-      category: "Clothing",
-      items: getGenderSpecificItems(
-        ["Tank top", "Shorts", "Light, breathable fabrics"],
-        gender
-      ),
-      reasoning: "Hot weather - minimal, breathable clothing",
-    });
+    // For females, randomly suggest dress instead of top + bottoms
+    if (gender === "female" && Math.random() < 0.5) {
+      suggestions.push({
+        category: "Clothing",
+        items: getGenderSpecificItems(
+          ["Dress", "Light, breathable fabrics"],
+          gender
+        ),
+        reasoning: "Hot weather - minimal, breathable clothing",
+      });
+    } else {
+      suggestions.push({
+        category: "Clothing",
+        items: getGenderSpecificItems(
+          ["Tank top", "Shorts", "Light, breathable fabrics"],
+          gender
+        ),
+        reasoning: "Hot weather - minimal, breathable clothing",
+      });
+    }
   }
 
   // Temperature-based suggestions for outerwear and pants
@@ -165,6 +189,29 @@ export function buildSuggestions(
       ),
       reasoning: "Warm weather - protect from sun and stay cool",
     });
+  }
+
+  // If dress was suggested for females, remove any bottoms from all suggestions
+  if (temp > 25 && gender === "female") {
+    const hasDress = suggestions.some((suggestion) =>
+      suggestion.items.some((item) =>
+        item.toLowerCase().includes("dress")
+      )
+    );
+
+    if (hasDress) {
+      // Remove bottoms (pants, shorts) from all suggestions
+      suggestions.forEach((suggestion) => {
+        suggestion.items = suggestion.items.filter(
+          (item) =>
+            !item.toLowerCase().includes("pants") &&
+            !item.toLowerCase().includes("shorts") &&
+            !item.toLowerCase().includes("jeans") &&
+            !item.toLowerCase().includes("chinos") &&
+            !item.toLowerCase().includes("khakis")
+        );
+      });
+    }
   }
 
   return suggestions;
