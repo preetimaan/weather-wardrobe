@@ -5,11 +5,11 @@ import { WeatherDisplay } from './components/WeatherDisplay';
 import WeatherDetails from './components/WeatherDetails';
 import { LocationSearch } from './components/LocationSearch';
 import WardrobeSuggestions from './components/WardrobeSuggestions';
-import TemperatureToggle from './components/TemperatureToggle';
+import { ErrorMessage } from './components/ErrorMessage';
+import { EmptyState } from './components/EmptyState';
+import { FilterControls } from './components/FilterControls';
 import type { TemperatureUnit } from './components/TemperatureToggle';
-import GenderFilter from './components/GenderFilter';
 import type { Gender } from './components/GenderFilter';
-import Closet from './assets/walk-in closet flat background.jpg';
 
 function App() {
   const [, setCurrentCity] = useState<string>('');
@@ -73,17 +73,20 @@ function App() {
                       loading={weatherLoading || wardrobeLoading}
                       className="mb-6"
                     />
+                    {/* Show errors in empty state */}
+                    {(weatherError || wardrobeError) && (
+                      <ErrorMessage
+                        message={weatherError || wardrobeError || ''}
+                        className="mb-6 w-full"
+                      />
+                    )}
                     {/* Filters for empty state */}
-                    <div className="flex flex-col space-y-4 mt-4">
-                      <TemperatureToggle
-                        unit={temperatureUnit}
-                        onUnitChange={handleTemperatureUnitChange}
-                      />
-                      <GenderFilter
-                        gender={gender}
-                        onGenderChange={handleGenderChange}
-                      />
-                    </div>
+                    <FilterControls
+                      temperatureUnit={temperatureUnit}
+                      gender={gender}
+                      onTemperatureUnitChange={handleTemperatureUnitChange}
+                      onGenderChange={handleGenderChange}
+                    />
                   </div>
                 ) : (
                   <>
@@ -93,42 +96,18 @@ function App() {
                       className="mb-6"
                     />
                     {/* Filters */}
-                    <div className="flex flex-col space-y-4 mb-4">
-                      <TemperatureToggle
-                        unit={temperatureUnit}
-                        onUnitChange={handleTemperatureUnitChange}
-                      />
-                      <GenderFilter
-                        gender={gender}
-                        onGenderChange={handleGenderChange}
-                      />
-                    </div>
+                    <FilterControls
+                      temperatureUnit={temperatureUnit}
+                      gender={gender}
+                      onTemperatureUnitChange={handleTemperatureUnitChange}
+                      onGenderChange={handleGenderChange}
+                      className="mb-4"
+                    />
                     {(weatherError || wardrobeError) && (
-                      <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
-                        <div className="flex">
-                          <div className="flex-shrink-0">
-                            <svg
-                              className="h-5 w-5 text-red-400"
-                              viewBox="0 0 20 20"
-                              fill="currentColor"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </div>
-                          <div className="ml-3">
-                            <h3 className="text-sm font-medium text-red-800">
-                              Error
-                            </h3>
-                            <div className="mt-2 text-sm text-red-700">
-                              {weatherError || wardrobeError}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                      <ErrorMessage
+                        message={weatherError || wardrobeError || ''}
+                        className="mb-6"
+                      />
                     )}
                     {(weatherLoading || wardrobeLoading) && !currentWeather && (
                       <div className="flex justify-center items-center py-8 flex-1">
@@ -167,20 +146,7 @@ function App() {
                     />
                   </div>
                 ) : (
-                  <div className="flex flex-col items-center justify-start h-full pt-12">
-                    <img
-                      src={Closet}
-                      alt="Closet with clothing"
-                      className="w-72 h-66 mx-auto mb-6 opacity-80"
-                    />
-                    <h3 className="text-lg font-medium text-gray-900 mb-2 text-center">
-                      Ready to get dressed?
-                    </h3>
-                    <p className="text-gray-600 text-center">
-                      Search for a city to see weather and wardrobe
-                      suggestions
-                    </p>
-                  </div>
+                  <EmptyState />
                 )}
               </div>
             </div>

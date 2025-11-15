@@ -49,19 +49,34 @@ class WeatherApiService {
   private baseUrl: string;
 
   constructor() {
-    // Use our backend API instead of OpenWeatherMap directly
-    this.baseUrl = 'http://localhost:3000/api';
+    // Use Netlify Functions in production, local backend in development
+    if (import.meta.env.PROD) {
+      // In production, use Netlify Functions (via redirect)
+      this.baseUrl = '/api';
+    } else {
+      // In development, use local Express backend
+      this.baseUrl = 'http://localhost:3000/api';
+    }
   }
 
   private async makeRequest<T>(endpoint: string, params: Record<string, string> = {}): Promise<T> {
-    const url = new URL(`${this.baseUrl}${endpoint}`);
-    
-    // Add parameters
-    Object.entries(params).forEach(([key, value]) => {
-      url.searchParams.set(key, value);
-    });
+    // Build URL - handle both absolute and relative URLs
+    let url: string;
+    if (this.baseUrl.startsWith('http')) {
+      // Absolute URL (development)
+      const urlObj = new URL(`${this.baseUrl}${endpoint}`);
+      Object.entries(params).forEach(([key, value]) => {
+        urlObj.searchParams.set(key, value);
+      });
+      url = urlObj.toString();
+    } else {
+      // Relative URL (production)
+      const searchParams = new URLSearchParams(params);
+      url = `${this.baseUrl}${endpoint}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+    }
 
-    const response = await fetch(url.toString());
+    try {
+    const response = await fetch(url);
     
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -69,6 +84,24 @@ class WeatherApiService {
     }
 
     return response.json();
+    } catch (err) {
+      // Handle network errors and connection failures
+      // Network errors typically throw TypeError with messages like:
+      // - "Failed to fetch"
+      // - "NetworkError when attempting to fetch resource"
+      // - "fetch failed"
+      if (err instanceof TypeError) {
+        const errorMsg = err.message.toLowerCase();
+        if (errorMsg.includes('fetch') || errorMsg.includes('network') || errorMsg.includes('failed')) {
+          throw new Error('Unable to connect to the server. Please try again later.');
+        }
+      }
+      if (err instanceof Error) {
+        // Re-throw existing error messages
+        throw err;
+      }
+      throw new Error('Something went wrong. Please try again later.');
+    }
   }
 
   async getCurrentWeather(city: string): Promise<WeatherData> {
@@ -83,10 +116,12 @@ class WeatherApiService {
   }
 
   // Note: Forecast endpoints will need to be implemented in the backend
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getForecast(city: string): Promise<ForecastData> {
     throw new Error('Forecast not yet implemented in backend');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getForecastByCoords(lat: number, lon: number): Promise<ForecastData> {
     throw new Error('Forecast not yet implemented in backend');
   }

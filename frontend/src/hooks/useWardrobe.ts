@@ -61,14 +61,24 @@ const useWardrobe = (): UseWardrobeReturn => {
       const response = await fetch(url);
       
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
 
       const data: WardrobeData = await response.json();
       setWardrobeData(data);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch wardrobe suggestions';
+      // Handle network errors and connection failures gracefully
+      let errorMessage: string;
+      
+      if (err instanceof TypeError && (err.message.includes('fetch') || err.message.includes('Failed to fetch'))) {
+        errorMessage = 'Unable to connect to the server. Please try again later.';
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
+      } else {
+        errorMessage = 'Something went wrong. Please try again later.';
+      }
+      
       setError(errorMessage);
       setWardrobeData(null);
     } finally {
