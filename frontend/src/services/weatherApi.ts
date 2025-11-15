@@ -117,12 +117,12 @@ class WeatherApiService {
 
   // Note: Forecast endpoints will need to be implemented in the backend
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getForecast(city: string): Promise<ForecastData> {
+  async getForecast(_city: string): Promise<ForecastData> {
     throw new Error('Forecast not yet implemented in backend');
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getForecastByCoords(lat: number, lon: number): Promise<ForecastData> {
+  async getForecastByCoords(_lat: number, _lon: number): Promise<ForecastData> {
     throw new Error('Forecast not yet implemented in backend');
   }
 
