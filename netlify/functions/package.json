@@ -1,0 +1,14 @@
+{
+  "name": "netlify-functions",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@netlify/functions": "^2.4.0",
+    "axios": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.7",
+    "typescript": "^5.8.3"
+  }
+}
+

@@ -48,7 +48,10 @@ const useWardrobe = (): UseWardrobeReturn => {
     setError(null);
 
     try {
-      let url = 'http://localhost:3000/api/wardrobe-suggestions?';
+      // Use Netlify Functions in production, local backend in development
+      const baseUrl = import.meta.env.PROD ? '/api' : 'http://localhost:3000/api';
+      
+      let url = `${baseUrl}/wardrobe-suggestions?`;
       
       if (city) {
         url += `city=${encodeURIComponent(city)}`;

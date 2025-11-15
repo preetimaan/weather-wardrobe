@@ -201,14 +201,66 @@ weather-wardrobe/
 
 ## Deployment
 
-This application is configured for deployment on Netlify. The build process creates optimized static files that can be served by any static hosting service.
+This application is configured for deployment on Netlify. The backend has been converted to Netlify Functions (serverless), and the frontend is deployed as static files.
 
 ### Netlify Deployment
 
-1. Connect your repository to Netlify
-2. Set build command: `yarn build`
-3. Set publish directory: `dist`
-4. Deploy!
+#### Prerequisites
+- A Netlify account
+- Your OpenWeatherMap API key
+
+#### Steps
+
+1. **Connect your repository to Netlify**
+   - Go to [Netlify](https://app.netlify.com)
+   - Click "Add new site" → "Import an existing project"
+   - Connect your Git provider and select this repository
+
+2. **Configure build settings** (Netlify should auto-detect from `netlify.toml`, but verify):
+   - Build command: `cd frontend && yarn install && yarn build`
+   - Publish directory: `frontend/dist`
+   - Functions directory: `netlify/functions`
+
+3. **Set environment variables**
+   - Go to Site settings → Environment variables
+   - Add `OPENWEATHER_API_KEY` with your OpenWeatherMap API key
+
+4. **Install Netlify Functions dependencies**
+   - Netlify will automatically install dependencies from `netlify/functions/package.json` during build
+   - If you need to test locally, run: `cd netlify/functions && yarn install`
+
+5. **Deploy!**
+   - Push to your main branch or trigger a manual deploy
+   - Netlify will build the frontend and deploy the functions automatically
+
+#### Local Testing with Netlify Functions
+
+To test Netlify Functions locally:
+
+```bash
+# Install Netlify CLI globally
+npm install -g netlify-cli
+
+# Install function dependencies
+cd netlify/functions && yarn install
+
+# Run Netlify dev (from project root)
+netlify dev
+```
+
+This will start both the frontend and Netlify Functions locally.
+
+#### Docker vs Netlify
+
+**Docker** is still useful for:
+- Local development consistency
+- Deployment to other platforms (AWS, GCP, Azure, etc.)
+- Production deployments on containerized infrastructure
+
+**Netlify** uses:
+- Static site hosting for the frontend
+- Serverless functions for the backend (no Docker needed)
+- Automatic scaling and CDN distribution
 
 ## Contributing
 
