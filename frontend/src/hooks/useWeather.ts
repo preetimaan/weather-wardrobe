@@ -27,7 +27,9 @@ export const useWeather = (): UseWeatherReturn => {
       const weather = await weatherApi.getCurrentWeather(city);
       setCurrentWeather(weather);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch weather data');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch weather data';
+      const errorCode = (err as Error & { code?: string })?.code;
+      setError(errorCode ? `${errorMessage} [${errorCode}]` : errorMessage);
     } finally {
       setLoading(false);
     }
@@ -41,7 +43,9 @@ export const useWeather = (): UseWeatherReturn => {
       const weather = await weatherApi.getCurrentWeatherByCoords(lat, lon);
       setCurrentWeather(weather);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch weather data');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch weather data';
+      const errorCode = (err as Error & { code?: string })?.code;
+      setError(errorCode ? `${errorMessage} [${errorCode}]` : errorMessage);
     } finally {
       setLoading(false);
     }

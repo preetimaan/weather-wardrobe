@@ -76,14 +76,16 @@ class WeatherApiService {
     }
 
     try {
-      const response = await fetch(url);
-      
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `Weather API error: ${response.status} ${response.statusText}`);
-      }
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({})) as { error?: string; code?: string };
+      const error = new Error(errorData.error || `Weather API error: ${response.status} ${response.statusText}`) as Error & { code?: string };
+      error.code = errorData.code;
+      throw error;
+    }
 
-      return response.json();
+    return response.json();
     } catch (err) {
       // Handle network errors and connection failures
       // Network errors typically throw TypeError with messages like:

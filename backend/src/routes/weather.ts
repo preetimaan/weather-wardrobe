@@ -72,7 +72,7 @@ router.get('/weather', async (req: Request, res: Response): Promise<void> => {
     
     if (error.response?.status === 401) {
       res.status(500).json({ 
-        error: 'Invalid API key' 
+        error: 'Service temporarily unavailable. Please try again later.' 
       });
       return;
     }

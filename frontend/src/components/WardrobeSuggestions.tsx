@@ -38,14 +38,23 @@ const WardrobeSuggestions: React.FC<WardrobeSuggestionsProps> = ({
   }
 
   if (error) {
+    const codeMatch = error.match(/\[(ERR_\w+)\]/);
+    const code = codeMatch ? codeMatch[1] : undefined;
+    const message = error.replace(/\s*\[ERR_\w+\]\s*$/, '').trim();
+    // Show as warning if it's a city not found error, otherwise show as error
+    const isWarning = code === 'ERR_CITY_NOT_FOUND' || (!code && message.toLowerCase().includes('city not found'));
     return (
       <ErrorMessage
         title="Error loading wardrobe suggestions"
-        message={error}
+        message={message}
+        code={code}
+        variant={isWarning ? 'warning' : 'error'}
       />
     );
   }
 
+  // If no data and no error (e.g., connection errors don't set error), return null
+  // The parent component will show the placeholder
   if (!wardrobeData) {
     return null;
   }

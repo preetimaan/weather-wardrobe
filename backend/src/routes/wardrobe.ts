@@ -91,7 +91,7 @@ router.get('/wardrobe-suggestions', async (req: Request, res: Response): Promise
     
     if (error.response?.status === 401) {
       res.status(500).json({ 
-        error: 'Invalid API key' 
+        error: 'Service temporarily unavailable. Please try again later.' 
       });
       return;
     }

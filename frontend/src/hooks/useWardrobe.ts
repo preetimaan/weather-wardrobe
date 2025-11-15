@@ -64,26 +64,34 @@ const useWardrobe = (): UseWardrobeReturn => {
       const response = await fetch(url);
       
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        const errorData = await response.json().catch(() => ({})) as { error?: string; code?: string };
+        const error = new Error(errorData.error || `HTTP error! status: ${response.status}`) as Error & { code?: string };
+        error.code = errorData.code;
+        throw error;
       }
 
       const data: WardrobeData = await response.json();
       setWardrobeData(data);
     } catch (err) {
       // Handle network errors and connection failures gracefully
-      let errorMessage: string;
+      // For connection errors, don't show error on wardrobe side - let it show placeholder
+      // Only show errors for API issues (like invalid API key) or city not found
+      const isConnectionError = err instanceof TypeError && 
+        (err.message.includes('fetch') || err.message.includes('Failed to fetch'));
       
-      if (err instanceof TypeError && (err.message.includes('fetch') || err.message.includes('Failed to fetch'))) {
-        errorMessage = 'Unable to connect to the server. Please try again later.';
+      if (isConnectionError) {
+        // Don't set error for connection issues - wardrobe will show placeholder
+        setError(null);
+        setWardrobeData(null);
       } else if (err instanceof Error) {
-        errorMessage = err.message;
+        const errorMessage = err.message;
+        const errorCode = (err as Error & { code?: string })?.code;
+        setError(errorCode ? `${errorMessage} [${errorCode}]` : errorMessage);
+        setWardrobeData(null);
       } else {
-        errorMessage = 'Something went wrong. Please try again later.';
+        setError('Something went wrong. Please try again later.');
+        setWardrobeData(null);
       }
-      
-      setError(errorMessage);
-      setWardrobeData(null);
     } finally {
       setLoading(false);
     }

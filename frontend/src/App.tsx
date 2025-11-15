@@ -74,19 +74,29 @@ function App() {
                       className="mb-6"
                     />
                     {/* Show errors in empty state */}
-                    {(weatherError || wardrobeError) && (
-                      <ErrorMessage
-                        message={weatherError || wardrobeError || ''}
-                        className="mb-6 w-full"
-                      />
-                    )}
+                    {(weatherError || wardrobeError) && (() => {
+                      const errorText = weatherError || wardrobeError || '';
+                      const codeMatch = errorText.match(/\[(ERR_\w+)\]/);
+                      const code = codeMatch ? codeMatch[1] : undefined;
+                      const message = errorText.replace(/\s*\[ERR_\w+\]\s*$/, '').trim();
+                      // Show as warning if it's a city not found error, otherwise show as error
+                      const isWarning = code === 'ERR_CITY_NOT_FOUND' || (!code && message.toLowerCase().includes('city not found'));
+                      return (
+                        <ErrorMessage
+                          message={message}
+                          code={code}
+                          variant={isWarning ? 'warning' : 'error'}
+                          className="mb-6 w-full"
+                        />
+                      );
+                    })()}
                     {/* Filters for empty state */}
                     <FilterControls
                       temperatureUnit={temperatureUnit}
-                      gender={gender}
+                        gender={gender}
                       onTemperatureUnitChange={handleTemperatureUnitChange}
-                      onGenderChange={handleGenderChange}
-                    />
+                        onGenderChange={handleGenderChange}
+                      />
                   </div>
                 ) : (
                   <>
@@ -98,17 +108,27 @@ function App() {
                     {/* Filters */}
                     <FilterControls
                       temperatureUnit={temperatureUnit}
-                      gender={gender}
+                        gender={gender}
                       onTemperatureUnitChange={handleTemperatureUnitChange}
-                      onGenderChange={handleGenderChange}
+                        onGenderChange={handleGenderChange}
                       className="mb-4"
-                    />
-                    {(weatherError || wardrobeError) && (
-                      <ErrorMessage
-                        message={weatherError || wardrobeError || ''}
-                        className="mb-6"
                       />
-                    )}
+                    {(weatherError || wardrobeError) && (() => {
+                      const errorText = weatherError || wardrobeError || '';
+                      const codeMatch = errorText.match(/\[(ERR_\w+)\]/);
+                      const code = codeMatch ? codeMatch[1] : undefined;
+                      const message = errorText.replace(/\s*\[ERR_\w+\]\s*$/, '').trim();
+                      // Show as warning if it's a city not found error, otherwise show as error
+                      const isWarning = code === 'ERR_CITY_NOT_FOUND' || (!code && message.toLowerCase().includes('city not found'));
+                      return (
+                        <ErrorMessage
+                          message={message}
+                          code={code}
+                          variant={isWarning ? 'warning' : 'error'}
+                          className="mb-6"
+                        />
+                      );
+                    })()}
                     {(weatherLoading || wardrobeLoading) && !currentWeather && (
                       <div className="flex justify-center items-center py-8 flex-1">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
@@ -144,6 +164,10 @@ function App() {
                       loading={wardrobeLoading}
                       error={wardrobeError}
                     />
+                    {/* Show placeholder if no wardrobe data and no error (connection errors don't set wardrobe error) */}
+                    {!wardrobeData && !wardrobeError && !wardrobeLoading && (
+                      <EmptyState />
+                    )}
                   </div>
                 ) : (
                   <EmptyState />
