@@ -49,9 +49,9 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-      <div className="relative py-3 sm:max-w-5xl sm:mx-auto">
-        <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-12">
+    <div className="min-h-screen bg-gray-100 py-4 flex flex-col justify-center sm:py-6">
+      <div className="relative py-2 sm:max-w-5xl sm:mx-auto">
+        <div className="relative px-4 py-6 bg-white shadow-lg sm:rounded-3xl sm:p-12 sm:py-6">
           <div className="max-w-5xl mx-auto">
             {/* Header - Full width */}
             <div className="text-center mb-12">
@@ -176,6 +176,29 @@ function App() {
             </div>
           </div>
         </div>
+      </div>
+      {/* Attribution */}
+      <div className="text-center mt-8">
+        <p className="text-sm text-gray-500">
+          Created by{' '}
+          <a
+            href="https://github.com/preetimaan"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 underline"
+          >
+            Preeti Maan
+          </a>
+          {' '}and assisted by{' '}
+          <a
+            href="https://www.cursor.com/en"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 underline"
+          >
+            AI
+          </a>
+        </p>
       </div>
     </div>
   );
